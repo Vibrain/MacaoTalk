@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html lang="ko" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]><html lang="ko" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]><html lang="ko" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="ko" class="no-js"> <!--<![endif]-->
+<head>
+<meta charset='utf-8'>
+<title>Macao Web Application</title>
+<script>
+    function isMobile(){ 
+        if('ontouchstart' in window ) {
+            var userAgent = navigator.userAgent.toLowerCase(), 
+                browser = {
+                    msie    : /msie/.test( userAgent ) && !/opera/.test( userAgent ),
+                    safari  : /webkit/.test( userAgent ),
+                    firefox : /mozilla/.test( userAgent ) && !/(compatible|webkit)/.test( userAgent ),
+                    opera   : /opera/.test( userAgent )
+                };
+
+            if( browser.msie ){ //IE
+            //alert("ie");
+                document.write('<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />');
+                document.createElement("header");
+                document.createElement("section");
+                document.createElement("article");
+                document.createElement("footer");
+                document.createElement("menu");
+                document.createElement("nav");
+            //  document.write('IEmeta')
+            } else if ( browser.safari ){ //Chrome || Safari
+            // alert("Chrome Safari");
+                document.write('<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />')
+            } else if ( browser.opera ){ // Opera
+            // alert("opera");
+                document.write('<meta name="viewport" content="user-scalable=no, initial-scale=0.75, maximum-scale=0.75, minimum-scale=0.75" />')
+            } else { 
+            // alert("etc");
+                document.write('<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no " />')
+            }
+
+            window.addEventListener('load', function() {
+		      setTimeout(scrollTo, 0, 0, 1); 
+	        }, false);
+        } 
+        else{
+            return false;
+        }
+    }
+</script>
+<link rel="apple-touch-icon" sizes="114x114" href="apple-touch-icon.png"> 
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="apple-touch-icon-114x114-precomposed.png">
+<link rel="apple-touch-startup-image" href="startup.png">
+<link rel="icon" media="all" type="image/x-icon" href="favicon.ico">
+<link rel="stylesheet" href="css/formalize.css">
+<link rel="stylesheet" href="css/bootstrap.css">
+<link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+<link rel="stylesheet" href="css/jquery.mobile-1.1.min.css">
+<link rel="stylesheet" href="css/main.css">
+<script src="js/modernizr-2.6.2.min.js"></script>
+<script src="js/require-2.1.2.min.js"></script>
+<script src="js/angular-1.0.3.min.js"></script>
+<script src="js/physics.min.js"></script>
+<script src="js/common.js"></script>
+</head>
+<body>
+<header>
+    <h1>마카오입니다. 무엇을 도와드릴까?</h1>
+</header>
+<nav id="char_set">
+    <ul>
+        <li><img src="./sheldon.jpg" /></li>
+        <li><img src="./itcrowd.png" /></li>
+        <li><img src="./hoking.jpg" /></li>
+        <li><img src="./sulli.jpg" /></li>
+        <li><img src="./c_bang.jpg" /></li>
+    </ul>
+</nav>
+<div id="experiment"> 
+    <div id="cube">
+        <div class="face one">1</div>
+        <div class="face two">2</div>
+        <div class="face three">3</div>
+        <div class="face four">4</div>
+        <div class="face five">5</div>
+        <div class="face six">6</div>
+    </div>    
+</div>
+<section id="main_panel">
+    
+    <div class="panel start_edge">
+        출발! 한바퀴 돌아올때마다 임의의 포상 휴가를 받습니다.
+    </div>
+    <div class="panel first_side">
+        102 보충대
+    </div>
+    <div class="panel first_side">
+        306 보충대
+    </div>
+    <div class="panel first_side">
+        황금마차
+    </div>
+    <div class="panel first_side">
+        논산 훈련소
+    </div>    
+    <div class="panel first_side">
+        영창
+    </div>
+    <div class="panel first_edge">
+        행정반
+    </div>
+    <div class="panel first_edge">
+        소대장실
+    </div>
+    <div class="panel first_edge">
+        충성클럽
+    </div>
+    <div class="panel first_edge">
+        주임원사실
+    </div>    
+    <div class="panel first_edge">
+        복불복 파견
+    </div>
+    <div class="panel first_edge">
+        헌병대대
+    </div>  
+    <div class="panel first_edge">
+        수송대대
+    </div>  
+    <div class="panel first_edge">
+        황금마차
+    </div>
+    <div class="panel first_edge">
+        관리대대
+    </div>
+    <div class="panel first_edge">
+        운전병과의 쇼부
+    </div>    
+    <div class="panel first_edge">
+        계룡대근무지원단
+    </div>
+    <div class="panel first_edge">
+        제2작전사령부
+    </div>
+    <div class="panel first_edge">
+        3군본부 
+    </div>
+    <div class="panel first_edge">
+        국방부
+    </div>       
+</section>
+<footer>
+    
+</footer>
+<script>
+if(isMobile()) document.write('<script src="js/zepto.min.js"><\/script>');
+else document.write('<script src="js/jquery-1.8.2.min.js"><\/script>');
+</script>
+<script src="js/bootstrap.js"></script>
+<script>
+var props = 'transform WebkitTransform MozTransform OTransform msTransform'.split(' '),
+	prop,
+	el = document.createElement('div');
+
+for(var i = 0, l = props.length; i < l; i++) {
+	if(typeof el.style[props[i]] !== "undefined") {
+		prop = props[i];
+		break;
+	}
+}
+
+var xAngle = 0, yAngle = 0;
+$('body').keyup(function(evt) {
+	switch(evt.keyCode) {
+		case 37: // left
+			yAngle += 90;
+			break;
+		
+		case 38: // up
+			xAngle += 90;				
+			break;
+		
+		case 39: // right
+			yAngle -= 90;
+			break;
+			
+		case 40: // down
+			xAngle -= 90;
+			break;
+	};
+	document.getElementById('cube').style[prop] = "rotateX("+xAngle+"deg) rotateY("+yAngle+"deg)";
+});
+</script>
+</body>
+</html>
