@@ -203,11 +203,11 @@
     </div>
     <nav id="char_set">
         <ul>
-            <li id="player1" class="player"><img src="./sheldon.jpg" /></li>
-            <li id="player2" class="player"><img src="./itcrowd.png" /></li>
-            <li id="player3" class="player"><img src="./hoking.jpg" /></li>
-            <li id="player4" class="player"><img src="./sulli.jpg" /></li>
-            <li id="player5" class="player"><img src="./c_bang.jpg" /></li>
+            <li id="player1"><img src="./sheldon.jpg" /></li>
+            <li id="player2"><img src="./itcrowd.png" /></li>
+            <li id="player3"><img src="./hoking.jpg" /></li>
+            <li id="player4"><img src="./sulli.jpg" /></li>
+            <li id="player5"><img src="./c_bang.jpg" /></li>
         </ul>
     </nav>
 </section>
@@ -239,7 +239,7 @@ for(var i = 0, l = props.length; i < l; i++) {
 	}
 }
 
-var xAngle = 0, yAngle = 0;
+var xAngle = 0, yAngle = 0, order = 0, moveArray = [], afterWhereIs;
 $('body').keyup(function(evt) {
 	switch(evt.keyCode) {
 		case 37: // left
@@ -258,8 +258,8 @@ $('body').keyup(function(evt) {
 			xAngle -= 90;
 			break;
 	};
-	document.getElementsByClassName('cube')[0].style[prop] = "rotateX("+xAngle+"deg) rotateY("+yAngle+"deg)";
-    document.getElementsByClassName('cube')[1].style[prop] = "rotateX("+xAngle+"deg) rotateY("+yAngle+"deg)";
+	//document.getElementsByClassName('cube')[0].style[prop] = "rotateX("+xAngle+"deg) rotateY("+yAngle+"deg)";
+   // document.getElementsByClassName('cube')[1].style[prop] = "rotateX("+xAngle+"deg) rotateY("+yAngle+"deg)";
 });
 
     $("#macao_button").hover(function(){
@@ -275,90 +275,113 @@ $('body').keyup(function(evt) {
         yAngle = 0;
         switch(rst){
             case 1: 
-                yAngle += 360*(getRandomNum()%10+5);
-                xAngle += (360*(getRandomNum()%10+5)+270);
+                yAngle += 360*(parseInt(getRandomNum()/61)%10+5);
+                xAngle += (360*(parseInt(getRandomNum()/29)%10+5)+270);
                 break;
             case 2:
-                yAngle += 360*(getRandomNum()%10+5);
-                xAngle += 360*(getRandomNum()%10+5);
+                yAngle += 360*(parseInt(getRandomNum()/31)%10+5);
+                xAngle += 360*(parseInt(getRandomNum()/53)%10+5);
                 break;
             case 3:
-                yAngle += (360*(getRandomNum()%10+5)+270);
-                xAngle += 360*(getRandomNum()%10+5);
+                yAngle += (360*(parseInt(getRandomNum()/13)%10+5)+270);
+                xAngle += 360*(parseInt(getRandomNum()/37)%10+5);
                 break;
             case 4:
-                yAngle += (360*(getRandomNum()%10+5)+90);
-                xAngle += 360*(getRandomNum()%10+5);
+                yAngle += (360*(parseInt(getRandomNum()/41)%10+5)+90);
+                xAngle += 360*(parseInt(getRandomNum()/43)%10+5);
                 break;
             case 5:
-                yAngle += 360*(getRandomNum()%10+5);
-                xAngle += (360*(getRandomNum()%10+5)+180);
+                yAngle += 360*(parseInt(getRandomNum()/47)%10+5);
+                xAngle += (360*(parseInt(getRandomNum()/17)%10+5)+180);
                 break;
             case 6:
-                yAngle += (360*(getRandomNum()%10+5)+90);
-                xAngle += (360*(getRandomNum()%10+5)+90);
+                yAngle += (360*(parseInt(getRandomNum()/59)%10+5)+90);
+                xAngle += (360*(parseInt(getRandomNum()/19)%10+5)+90);
                 break;
         };
         document.getElementsByClassName('cube')[0].style[prop] = "rotateX("+xAngle+"deg) rotateY("+yAngle+"deg)";
         xAngle = 0;
         yAngle = 0;
-        rst = getRandomNum()%6+1; /*같은 시간값이 나온다 망해버려써....*/
+        rst = parseInt(getRandomNum()/1000)%6+1; /*같은 시간값이 나온다 망해버려써....*/
         rstValue += rst;
         switch(rst){
             case 1: 
-                yAngle += 360*(getRandomNum()%10);
-                xAngle += (360*(getRandomNum()%10)+270);
+                yAngle += 360*(parseInt(getRandomNum()/61)%10+5);
+                xAngle += (360*(parseInt(getRandomNum()/29)%10+5)+270);
                 break;
             case 2:
-                yAngle += 180*(getRandomNum()%20);
-                xAngle += 180*(getRandomNum()%20);
+                yAngle += 360*(parseInt(getRandomNum()/31)%10+5);
+                xAngle += 360*(parseInt(getRandomNum()/53)%10+5);
                 break;
             case 3:
-                yAngle += (360*(getRandomNum()%10)+270);
-                xAngle += 360*(getRandomNum()%10);
+                yAngle += (360*(parseInt(getRandomNum()/13)%10+5)+270);
+                xAngle += 360*(parseInt(getRandomNum()/37)%10+5);
                 break;
             case 4:
-                yAngle += (360*(getRandomNum()%10)+90);
-                xAngle += 360*(getRandomNum()%10);
+                yAngle += (360*(parseInt(getRandomNum()/41)%10+5)+90);
+                xAngle += 360*(parseInt(getRandomNum()/43)%10+5);
                 break;
             case 5:
-                yAngle += 360*(getRandomNum()%10);
-                xAngle += (360*(getRandomNum()%10)+180);
+                yAngle += 360*(parseInt(getRandomNum()/47)%10+5);
+                xAngle += (360*(parseInt(getRandomNum()/17)%10+5)+180);
                 break;
             case 6:
-                yAngle += (360*(getRandomNum()%10)+90);
-                xAngle += (360*(getRandomNum()%10)+90);
+                yAngle += (360*(parseInt(getRandomNum()/59)%10+5)+90);
+                xAngle += (360*(parseInt(getRandomNum()/19)%10+5)+90);
                 break;
         };      
         document.getElementsByClassName('cube')[1].style[prop] = "rotateX("+xAngle+"deg) rotateY("+yAngle+"deg)";
         $(this).attr("pre",rstValue);
+        if($("li[selectedH='yes']").length==0) return;
+        var whereClass = $("li[selectedH='yes']").eq(order).attr("class"), whereIs = 0;
+       // if(whereClass.indexOf("move")!=-1) whereIs = parseInt( whereClass.substr(whereClass.indexOf("move"), 5).charAt(4) );
+        whereIs = parseInt(whereClass.charAt(4));
+        afterWhereIs = (whereIs+rstValue)%20;
+        var q_before = whereIs / 5, r_before = whereIs % 5, q = afterWhereIs / 5, r = afterWhereIs % 5;
+        moveArray=[];
+        if(q_before > q) q += 5;
+        for(var i = q_before+1; i <= q; i++){
+            moveArray.push("move"+(i%5)*5);   
+        }
+        moveArray.push("move"+afterWhereIs);
+       /* for(var j = 0; j < moveArray.length; j++){ 
+            if(j == 0) {
+                setTimeout(function(){                    
+                    $("li[selectedH='yes']").eq(order).addClass(moveArray[j]);
+                }, 2500); 
+            }else{
+                setTimeout(function(){
+                    $("li[selectedH='yes']").eq(order).removeClass(moveArray[j-1]);
+                    $("li[selectedH='yes']").eq(order).addClass(moveArray[j]);
+                }, 2500+j*1000);   
+            }            
+        } */
+        var moviing = setTimeout(function(){$("li[selectedH='yes']").eq(order).attr('class',moveArray[0])}, 2500);  
+        var mobiing = setTimeout(function(){$("li[selectedH='yes']").eq(order).attr('class',moveArray[1])}, 3500);  
+        
+        order = (order+1)%($("li[selectedH='yes']").length);
         /*$(".selected").eq(0).addClass("move9"); move1,...move20 class를 top, left줘서 설정*/
     });
 
     $("#player1").click(function(){
-        $(this).css("top", "100px");
-        $(this).css("left", "350px");   
-        $(this).addClass("selected");
+        $(this).attr("selectedH", "yes");
+        $(this).addClass("move0");   
     });    
     $("#player2").click(function(){
-        $(this).css("top", "100px");
-        $(this).css("left", "350px"); 
-        $(this).addClass("selected");
+        $(this).attr("selectedH", "yes");
+        $(this).addClass("move0"); 
     });
     $("#player3").click(function(){
-        $(this).css("top", "100px");
-        $(this).css("left", "350px");  
-        $(this).addClass("selected");
+        $(this).attr("selectedH", "yes");
+        $(this).addClass("move0"); 
     });
     $("#player4").click(function(){
-        $(this).css("top", "100px");
-        $(this).css("left", "350px");  
-        $(this).addClass("selected");
+        $(this).attr("selectedH", "yes");
+        $(this).addClass("move0"); 
     });    
     $("#player5").click(function(){
-        $(this).css("top", "100px");
-        $(this).css("left", "350px");  
-        $(this).addClass("selected");
+        $(this).attr("selectedH", "yes");
+        $(this).addClass("move0"); 
     });
     
 </script>
