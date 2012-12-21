@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]><html lang="ko" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]><html lang="ko" class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]><html lang="ko" class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html lang="ko" class="no-js"> <!--<![endif]-->
+<!--[if lt IE 7]><html lang="ko" class="no-js lt-ie9 lt-ie8 lt-ie7" ng-app> <![endif]-->
+<!--[if IE 7]><html lang="ko" class="no-js lt-ie9 lt-ie8" ng-app> <![endif]-->
+<!--[if IE 8]><html lang="ko" class="no-js lt-ie9" ng-app> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="ko" class="no-js" ng-app> <!--<![endif]-->
 <head>
 <meta charset='utf-8'>
 <title>Macao Web Application</title>
@@ -64,7 +64,7 @@
 </head>
 <body>
 <header>
-    <h1>마카오입니다. 무엇을 도와드릴까?</h1>
+    <h1 style="display:none;">마카오입니다. 무엇을 도와드릴까?</h1>
 </header>
 <div id="experiment"> 
     <div class="cube">
@@ -210,13 +210,46 @@
             <li id="player5"><img src="./c_bang.jpg" /></li>
         </ul>
     </nav>
+    <div id="do_work" class="btn-group open" style="left: -3000px;">
+      <button class="btn">Action</button>
+      <button class="btn dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li class="cleaning">대청소를 해준다</li>
+        <li class="dropping">복분자를 대접한다</li>
+        <li class="teaching">학문을 가르친다</li>       
+      </ul>
+      <div id="work_comment">  
+          1. 휴가 가능성은 해당 지역을 거쳐가는 타 플레이어의 휴가를 뺏을 때 부여됩니다. <br>
+          2. 짬이 찰수록 일을 할 때 잘못을 일으킬 가능성이 낮아집니다. 하지만 말년이 되면 말썽을 일으킵니다.<br>
+          3. 게임상의 한 턴이 지날 때마다 10일이 흐릅니다.<br>
+          4. 다른 병사가 공헌한 곳에 도착하게 되면 비난을 받으면서 휴가가 삭감되고, 공헌한 병사에게 그만큼의 상장이 주어집니다.
+      </div>
+      <button id="doit" class="btn" style="display:none;">당장 한다</button>     
+    </div>
 </section>
 <div id="button_container">
    <button id="macao_button"></button> 
 </div>
 
-<footer>
-    
+<footer id="profile">
+    <article id="day-data">
+        <div id="day-data-1" style="display:none;">(휴가를 제외한) 복무일수가 일 남았습니다.</div>
+        <div id="day-data-2" style="display:none;">(휴가를 제외한) 복무일수가 일 남았습니다.</div> 
+        <div id="day-data-3" style="display:none;">(휴가를 제외한) 복무일수가 일 남았습니다.</div>  
+        <div id="day-data-4" style="display:none;">(휴가를 제외한) 복무일수가 일 남았습니다.</div>  
+        <div id="day-data-5" style="display:none;">(휴가를 제외한) 복무일수가 일 남았습니다.</div>  
+    </article>
+    <div id="minus-in-army-day">
+        <h2>포상 휴가 목록</h2>
+        <ul id="minus-list">
+            <li class="vacation-class {{vacation.ktx}}" ng-repeat="vacation in vacations" ng-click="visibility='invisible'" ng-class="visibility">
+                <label for="reason{{cnt()}}">포상 = </label><span id="reason{{cnt()}}" class="vacation_reason">{{vacation.reason}}</span> <br/>
+                <label for="upcoming{{cnt()}}">기간 = </label><span id="upcoming{{cnt()}}" class="vacation_count">{{vacation.period}}일</span>    
+            </li>
+        </ul>
+    </div>    
 </footer>
 <script>
 if(isMobile()) document.write('<script src="js/zepto.min.js"><\/script>');
@@ -224,11 +257,17 @@ else document.write('<script src="js/jquery-1.8.2.min.js"><\/script>');
 </script>
 <script src="js/bootstrap.js"></script>
 <script>
+sessionStorage.clear();
+    
 function getRandomNum(){
     return new Date().getTime();
 };
 function getRandomNum2(){
     return parseInt(Math.random()*6)+1;
+};
+function selectInitialize(){
+    $("#do_work").css("left", "-3000px");
+    $("#work_comment").html("1. 휴가 가능성은 해당 지역을 거쳐가는 타 플레이어의 휴가를 뺏을 때 부여됩니다. <br> 2. 짬이 찰수록 일을 할 때 잘못을 일으킬 가능성이 낮아집니다. 하지만 말년이 되면 말썽을 일으킵니다.<br> 3. 게임상의 한 턴이 지날 때마다 10일이 흐릅니다.<br> 4. 다른 병사가 공헌한 곳에 도착하게 되면 비난을 받으면서 휴가가 삭감되고, 공헌한 병사에게 그만큼의 상장이 주어집니다.");    
 };
 
 var props = 'transform WebkitTransform MozTransform OTransform msTransform'.split(' '),
@@ -241,8 +280,164 @@ for(var i = 0, l = props.length; i < l; i++) {
 		break;
 	}
 }
+var vacationCandidate = ["체육대회 1등", "사단장 표창", "연대장 표창", "대대장 표창", "중대장 표창", "참모총장 명함", "사령관 명함", "상점 10점", 
+                         "상점 20점", "상점 30점", "사령관 표창", "신병위로외박", "성과제 4개", "성과제 5개", "성과제 10개", "금연 포상", "1차 정기", "2차 정기", "3차 정기"];
 
-var xAngle = 0, yAngle = 0, order = 0, disableAnotherClick = false;
+var goldenCard = ["농구를 하다가 손가락이 부러졌습니다","축구를 하다가 병원에 실려갔습니다", "배드민턴을 치다가 발목이 삐었습니다", "선임한테 대들다가 영창을 갔습니다", "폭설이 내려 제설을 했습니다",
+                  "간첩을 잡았습니다", "휴가 나가서 대민마찰/여자와의 관계/을(를) 일으켰습니다"];     
+
+var learning = ["양자역학", "민법", "수학", "생화학", "심리학", "리더십", "그림판", "군법", "C언어", "여자", "SQL", "회계학", "더하기"];
+    
+var xAngle = 0, 
+    yAngle = 0, 
+    order = 0, 
+    disableAnotherClick = false,
+    player_order = 1, 
+    turn = 0, 
+    innerCount = 1, 
+    turnPerDay = 10; 
+    
+    $(".cleaning").on('mouseover', function(){
+        $("#work_comment").html("1 ~ 2일의 휴가 가능성을 얻습니다.<br> 휴가 삭감 또는 벌점을 받을 가능성이 거의 없습니다.");     
+        $("#doit").show().removeClass("dropit teachit").addClass("cleanit");
+        /*이미 clean되어 있을 때는 못하게 해야 한다.*/
+    });
+    $(".dropping").on('mouseover', function(){
+        $("#work_comment").html("2 ~ 4일의 휴가 가능성을 얻습니다.<br> 휴가 삭감 또는 벌점을 받을 가능성이 조금 있습니다."); 
+        $("#doit").show().removeClass("cleanit teachit").addClass("dropit");
+    });
+    $(".teaching").on('mouseover', function(){
+        $("#work_comment").html("3 ~ 5일의 휴가 가능성을 얻습니다.<br> 휴가 삭감 또는 벌점을 받을 가능성이 농후하게 있습니다.");
+        $("#doit").show().removeClass("dropit cleanit").addClass("teachit");
+    });    
+    $("#doit").on('click', function(){
+        var imsi_order = order - 1; if(order == -1) imsi_order = $("li[selectedH='yes']").length-1;
+        var inner_order = innerCount - 1; if(inner_order == 0) inner_order = $("li[selectedH='yes']").length;
+        
+        if($(this).hasClass("cleanit")) {
+
+            var where = parseInt($("li[selectedH='yes']").eq(imsi_order).attr('class').replace("move",""));             
+            
+            var dayChange = JSON.parse(sessionStorage.getItem("player"+inner_order));
+            var randomMinus = parseInt(Math.random()*4)-2;
+           
+            if(dayChange.dayleft < 500 && dayChange.dayleft >= 365) randomMinus = parseInt(Math.random()*3)-2; 
+            else if(dayChange.dayleft < 365 && dayChange.dayleft >= 50) randomMinus = parseInt(Math.random()*2.5)-2; 
+            else if(dayChange.dayleft < 50) randomMinus = parseInt(Math.random()*6)-2; 
+            
+            if(randomMinus > 0) alert("해당 플레이어가 청소를 너무 못해서 "+randomMinus*10+"점의 벌점을 받았습니다.");
+            else {
+                alert("해당 플레이어가 "+randomMinus*(-10)+"점의 상점을 받았습니다.");
+                 $(".panel").eq(where).append("<img src='./img/cleaning.bmp' />").addClass("cleaned").addClass("possession"+inner_order);
+            }
+            dayChange.dayleft += randomMinus;
+            var profile = {dayleft: dayChange.dayleft, order: dayChange.order};
+            sessionStorage.setItem("player"+inner_order, JSON.stringify(profile));           
+            
+         }
+         else if($(this).hasClass("dropit")){
+             
+            var where = parseInt($("li[selectedH='yes']").eq(imsi_order).attr('class').replace("move",""));  
+            
+            var dayChange = JSON.parse(sessionStorage.getItem("player"+inner_order));
+            var randomMinus = parseInt(Math.random()*3);
+            
+            if(dayChange.dayleft < 50) randomMinus = parseInt(Math.random()*5); 
+            else if(dayChange.dayleft < 200 && dayChange.dayleft >= 50) randomMinus = parseInt(Math.random()*1.5); 
+            else if(dayChange.dayleft < 365 && dayChange.dayleft >= 200) randomMinus = parseInt(Math.random()*2);
+            else if(dayChange.dayleft < 500 && dayChange.dayleft >= 365) randomMinus = parseInt(Math.random()*2.5);
+             
+            if(randomMinus != 0) {                
+                
+                dayChange.dayleft += randomMinus;
+                var profile = {dayleft: dayChange.dayleft, order: dayChange.order};
+                sessionStorage.setItem("player"+inner_order, JSON.stringify(profile));
+                 alert("해당 플레이어가 술병을 깨서 "+randomMinus*10+"점의 벌점을 받았습니다.");    
+            }
+            else{
+                $(".panel").eq(where).append("<img src='./img/dropping.jpg' />").addClass("dropped").addClass("possession"+inner_order);
+            }
+         }
+        else if($(this).hasClass("teachit")){
+            
+            var where = parseInt($("li[selectedH='yes']").eq(imsi_order).attr('class').replace("move",""));  
+           
+            var dayChange = JSON.parse(sessionStorage.getItem("player"+inner_order));
+            var randomMinus = parseInt(Math.random()*5);
+            
+            if(dayChange.dayleft < 50) randomMinus = parseInt(Math.random()*8); 
+            else if(dayChange.dayleft < 200 && dayChange.dayleft >= 50) randomMinus = parseInt(Math.random()*1.5); 
+            else if(dayChange.dayleft < 365 && dayChange.dayleft >= 200) randomMinus = parseInt(Math.random()*2.5);
+            else if(dayChange.dayleft < 500 && dayChange.dayleft >= 365) randomMinus = parseInt(Math.random()*3.5);
+            else randomMinus = parseInt(Math.random()*5);            
+            
+            if(randomMinus != 0) {
+                
+                alert("해당 플레이어가 "+learning[getRandomNum()%learning.length]+"을(를) 가르쳐주다가 "+randomMinus*10+"점의 벌점을 받았습니다.");
+                dayChange.dayleft += randomMinus;
+                var profile = {dayleft: dayChange.dayleft, order: dayChange.order};
+                sessionStorage.setItem("player"+inner_order, JSON.stringify(profile));
+            }            
+            else{
+                 $(".panel").eq(where).append("<img src='./img/teaching.GIF' />").addClass("taught").addClass("possession"+inner_order);
+            }
+         }
+            
+        selectInitialize();
+        
+    });
+        
+    var doWork = function(pos){
+        var imsi_order = order - 1; if(order == -1) imsi_order = $("li[selectedH='yes']").length-1;
+        var where = parseInt($("li[selectedH='yes']").eq(imsi_order).attr('class').replace("move",""));  
+        if($(".panel").eq(where).hasClass("cleaned taught dropped")){
+            var st = $(".panel").eq(where).attr("class").indexOf("possess");
+            var belongTo = $(".panel").eq(where).attr("class").charAt(st+10); 
+            if(belongTo == innerCount) {
+                //happens nothing                
+            }else{
+                var possessChange = JSON.parse(sessionStorage.getItem("player"+belongTo));
+                var dayChange = JSON.parse(sessionStorage.getItem("player"+innerCount));
+                var incdec = parseInt(Math.random()*5)+5; /*5~9일*/
+                dayChange.dayleft += incdec;
+                var vacationGroup = [];
+                switch(incdec) {
+                    case 5: vacationGroup.push("연대장 표창"); break;
+                    case 6: vacationGroup.push("대대장 표창"); vacationGroup.push("상점 20점"); break;
+                    case 7: vacationGroup.push("중대장 표창"); vacationGroup.push("대대장 표창");  break;
+                    case 8: vacationGroup.push("중대장 표창"); vacationGroup.push("연대장 표창"); break;
+                    case 9: vacationGroup.push("대대장 표창"); vacationGroup.push("연대장 표창"); break;
+                }
+                sessionStorage.setItem("vacation"+belongTo, vacationGroup);
+                alert(vacationGroup.toString()+'의 휴가를 얻었습니다.');
+                var profile = {dayleft: dayChange.dayleft, order: dayChange.order};
+                sessionStorage.setItem("player"+innerCount, JSON.stringify(profile));                  
+            }
+        }
+        else if($(".panel").eq(where).hasClass("cleaned taught")){
+            
+        }
+        else if($(".panel").eq(where).hasClass("cleaned dropped")){
+            
+        }
+        else if($(".panel").eq(where).hasClass("dropped taught")){
+            
+        }
+        else if($(".panel").eq(where).hasClass("cleaned")){
+            
+        }
+        else if($(".panel").eq(where).hasClass("taught")){
+            
+        }        
+        else if($(".panel").eq(where).hasClass("dropped")){
+            
+        }
+        
+        
+        $("#do_work").css("left", "-350px");
+        $("#do_work").addClass("open");          
+    };
+    
     $('body').keyup(function(evt) {
         switch(evt.keyCode) {
             case 37: // left
@@ -261,18 +456,30 @@ var xAngle = 0, yAngle = 0, order = 0, disableAnotherClick = false;
                 xAngle -= 90;
                 break;
         };
-        //document.getElementsByClassName('cube')[0].style[prop] = "rotateX("+xAngle+"deg) rotateY("+yAngle+"deg)";
-       // document.getElementsByClassName('cube')[1].style[prop] = "rotateX("+xAngle+"deg) rotateY("+yAngle+"deg)";
     });
-
     $("#macao_button").hover(function(){
        $(this).addClass("gofar");        
     }, function(){
         $(this).removeClass("gofar");   
     });
-    $("#macao_button").click(function(){ 
+    
+    $("#macao_button").click(function(){      
         if(disableAnotherClick) return;
-        disableAnotherClick = true;
+        disableAnotherClick = true;    
+        
+        selectInitialize();
+        
+        var dayChange = JSON.parse(sessionStorage.getItem("player"+innerCount));
+        var profile = {dayleft: dayChange.dayleft-turnPerDay, order: dayChange.order};
+        sessionStorage.setItem("player"+innerCount, JSON.stringify(profile));
+        player_order = profile.order;
+        
+        $("#day-data-"+innerCount).show().text("player "+innerCount+" : (휴가를 제외한) 복무일수가 "+profile.dayleft+"일 남았습니다.");
+        innerCount++;        
+        if(innerCount > $("li[selectedH='yes']").length) {         
+            innerCount = 1;
+            turn++;
+        }
         $(this).removeClass("gofar");   
         var rst = getRandomNum()%6+1, rstValue;
         rstValue = rst;
@@ -338,7 +545,10 @@ var xAngle = 0, yAngle = 0, order = 0, disableAnotherClick = false;
         };      
         document.getElementsByClassName('cube')[1].style[prop] = "rotateX("+xAngle+"deg) rotateY("+yAngle+"deg)";
         $(this).attr("pre",rstValue);
-        if($("li[selectedH='yes']").length==0) return;
+        if($("li[selectedH='yes']").length==0) {
+            disableAnotherClick = false;   
+            return;
+        }
         var whereClass = $("li[selectedH='yes']").eq(order).attr("class"), whereIs = 0;
         console.log("whereClass:"+whereClass);
         whereIs = parseInt(whereClass.replace("move",""));
@@ -369,28 +579,46 @@ var xAngle = 0, yAngle = 0, order = 0, disableAnotherClick = false;
         var disableClick = setTimeout(function(){
             disableAnotherClick = false;
             order = (order+1)%($("li[selectedH='yes']").length);
+            doWork(afterWhereIs);
         }, 2500+500*moveArray.length);
+        
+       
     });
-
-    $("#player1").click(function(){
+    var turn = 1;
+    $("#player1").one('click', function(){        
         $(this).attr("selectedH", "yes");
         $(this).addClass("move0");   
+        $("#day-data-1").show();
+        var profile1 = {dayleft: "640", order: player_order++};
+        sessionStorage.setItem("player1", JSON.stringify(profile1));
     });    
-    $("#player2").click(function(){
+    $("#player2").one('click', function(){
         $(this).attr("selectedH", "yes");
         $(this).addClass("move0"); 
+        $("#day-data-2").show();
+        var profile2 = {dayleft: "640", order: player_order++};
+        sessionStorage.setItem("player2", JSON.stringify(profile2));
     });
-    $("#player3").click(function(){
+    $("#player3").one('click', function(){
         $(this).attr("selectedH", "yes");
         $(this).addClass("move0"); 
+        $("#day-data-3").show();
+        var profile3 = {dayleft: "640", order: player_order++};
+        sessionStorage.setItem("player3", JSON.stringify(profile3));
     });
-    $("#player4").click(function(){
+    $("#player4").one('click', function(){
         $(this).attr("selectedH", "yes");
         $(this).addClass("move0"); 
+        $("#day-data-4").show();
+        var profile4 = {dayleft: "640", order: player_order++};
+        sessionStorage.setItem("player4", JSON.stringify(profile4));
     });    
-    $("#player5").click(function(){
+    $("#player5").one('click', function(){
         $(this).attr("selectedH", "yes");
         $(this).addClass("move0"); 
+        $("#day-data-5").show();
+        var profile5 = {dayleft: "640", order: player_order++};
+        sessionStorage.setItem("player5", JSON.stringify(profile5));
     });
     
 </script>
