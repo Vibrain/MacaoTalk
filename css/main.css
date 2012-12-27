@@ -350,3 +350,11 @@
     position: relative;
     top: 110px;   
 }
+
+aside#profile{
+    position: absolute;
+    top: 100px;
+    right: 100px;
+    width: 300px;  
+    
+}
