@@ -58,7 +58,14 @@
 <link rel="stylesheet" href="css/main.css">
 <script src="http://www.parsecdn.com/js/parse-1.2.7.min.js"></script>
 <script>
-  Parse.initialize("BWdWwZJ3iLKfNi4GBuK5gLKUQV8oG2bC4uTKXrvk", "22XDpX7cbDmTIjFTQ9r6PDT7pCgh3utaxvVH4cKv");
+	Parse.initialize("BWdWwZJ3iLKfNi4GBuK5gLKUQV8oG2bC4uTKXrvk", "22XDpX7cbDmTIjFTQ9r6PDT7pCgh3utaxvVH4cKv");
+	var TestObject = Parse.Object.extend("TestObject");
+	var testObject = new TestObject();
+	testObject.save({foo: "bar"}, {
+	  success: function(object) {
+	    alert("yay! it worked");
+	  }
+	});
 </script>
 <script src="js/modernizr-2.6.2.min.js"></script>
 <script src="js/require-2.1.2.min.js"></script>
